@@ -10,13 +10,14 @@ load_dotenv()
 def load_documents(docs_path="docs"):
     print(f"Loading documents from /{docs_path}")
 
-    if not os.path.exists:
+    if not os.path.exists(docs_path):
         raise FileNotFoundError("The directory does not exist")
     
     loader = DirectoryLoader(
         path=docs_path,
         glob="*.txt",
         loader_cls=TextLoader,
+        loader_kwargs={"encoding":"utf-8"}
     )
 
     documents = loader.load()
@@ -34,7 +35,7 @@ def split_documents(documents,chunk_size=1000,chunk_overlap=0):
         chunk_overlap=chunk_overlap
     )
 
-    chunks = text_splitter.split_documents()
+    chunks = text_splitter.split_documents(documents)
 
     return chunks
 
@@ -54,7 +55,7 @@ def create_vector_store(chunks, persist_directory="db/chroma_db"):
     return vectorstore
 
 def main():
-    docs_path="/docs"
+    docs_path="docs"
     persist_directory="db/chroma_db"
     
     if os.path.exists(persist_directory):
