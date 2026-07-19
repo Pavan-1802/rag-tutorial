@@ -6,7 +6,7 @@ load_dotenv()
 
 persist_directory = "db/chroma_db"
 
-embedding_model = OpenAIEmbeddings("text-embedding-3-small")
+embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 
 db = Chroma(
     persist_directory=persist_directory,
@@ -14,7 +14,7 @@ db = Chroma(
     collection_metadata={"hnsw:space":"cosine"}
 )
 
-query = ""
+query = "When NVIDIA established?"
 
 retriever = db.as_retriever(
     search_type="similarity_score_threshold",
@@ -26,3 +26,4 @@ retriever = db.as_retriever(
 
 relevant_docs = retriever.invoke(query)
 
+print(relevant_docs)
